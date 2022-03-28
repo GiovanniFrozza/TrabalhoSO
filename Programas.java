@@ -54,7 +54,7 @@ public class Programas {
             new Word(Opcode.LDI, 0, -1, 6),      // 0   	r0 é valor a calcular fatorial
             new Word(Opcode.LDI, 1, -1, 1),      // 1   	r1 é 1 para multiplicar (por r0)
             new Word(Opcode.LDI, 6, -1, 1),      // 2   	r6 é 1 para ser o decremento
-            new Word(Opcode.LDI, 7, -1, 8),      // 3   	r7 tem posicao de stop do programa = 8
+            new Word(Opcode.LDI, 7, -1, 10),      // 3   	r7 tem posicao de stop do programa = 8
             new Word(Opcode.JMPIL, 7, 0, 0),     // 4   	se r0=0 pula para r7(=8)
             new Word(Opcode.JMPIE, 7, 0, 0),     // 5   	se r0=0 pula para r7(=8)
             new Word(Opcode.MULT, 1, 0, -1),     // 6   	r1 = r1 * r0
