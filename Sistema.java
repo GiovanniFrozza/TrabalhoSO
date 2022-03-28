@@ -17,14 +17,14 @@ public class Sistema {
 		monitor.dump(vm.m, 0, programa.length);
 		monitor.executa();
 		System.out.println("---------------------------------- após execucao ");
-		monitor.dump(vm.m, 0, programa.length);
+		monitor.dump(vm.m, 0, vm.m.length);
 	}
 
 	public static void main(String args[]) {
 		Sistema s = new Sistema();
-//	    s.roda(progs.fibonacci10());
+//		s.roda(progs.fibonacci());
+//		s.roda(progs.fatorial());
 //		s.roda(progs.progMinimo());
-		s.roda(progs.fatorial());
 	}
 }
 

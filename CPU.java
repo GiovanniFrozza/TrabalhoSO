@@ -47,6 +47,15 @@ public class CPU {
                     pc++;
                     break;
 
+                case LDD: // Rd ← [A]
+                    reg[ir.r1] = m[ir.p].p;
+                    pc++;
+                    break;
+
+                case LDX: // R1 <- [R2]
+                    reg[ir.r1] = m[reg[ir.r2]].p;
+                    pc++;
+                    break;
                 case STD: // [A] ← Rs
                     m[ir.p].opc = Opcode.DATA;
                     m[ir.p].p = reg[ir.r1];
@@ -81,8 +90,17 @@ public class CPU {
                     pc++;
                     break;
 
+                case SUBI: // Rd ← Rd – k
+                    reg[ir.r1] = reg[ir.r1] - ir.p;
+                    pc++;
+                    break;
+
                 case JMP: //  PC ← k
                     pc = ir.p;
+                    break;
+
+                case JMPI: // PC <- R1
+                    pc = reg[ir.r1];
                     break;
 
                 case JMPIG: // If Rc > 0 Then PC ← Rs Else PC ← PC +1
