@@ -1,0 +1,8 @@
+public enum InterruptorEnum {
+    INVALID_ADDRESS,
+    INVALID_REGISTER,
+    INVALID_INSTRUCTION,
+    OVERFLOW,
+    END_PROGRAM,
+    SYSTEM_CALL
+}
