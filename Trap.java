@@ -11,9 +11,10 @@ public class Trap {
 
     public void execute() {
         if (reg[8] == 1) {
-            Scanner in = new Scanner(System.in);
-            System.out.println("IN: ");
-            reg[9] = in.nextInt();
+            try (Scanner in = new Scanner(System.in)) {
+                System.out.println("IN: ");
+                reg[9] = in.nextInt();
+            }
         }
         
         if (reg[8] == 2) {
