@@ -70,18 +70,19 @@ public class CPU {
             // FETCH
             ir = m[pc]; 	// busca posicao da memoria apontada por pc, guarda em ir
             //if debug
+            interruptorEnum = null;
             showState();
             // EXECUTA INSTRUCAO NO ir
             switch (ir.opc) { // para cada opcode, sua execução
 
-                case LDI: // Rd ← k
+                case LDI: // Rd <- k
                     if (validateIndexRegister(ir.r1) && validateIntegerOverflow(ir.p)) {
                         reg[ir.r1] = ir.p;
                         pc++;
                     }
                     break;
 
-                case LDD: // Rd ← [A]
+                case LDD: // Rd <- [A]
                     if (validateIndexRegister(ir.r1) && validateMemoryAddress(ir.p) && validateIntegerOverflow(m[ir.p].p)) {
                         reg[ir.r1] = m[ir.p].p;
                         pc++;
@@ -95,7 +96,7 @@ public class CPU {
                     }
                     break;
 
-                case STD: // [A] ← Rs
+                case STD: // [A] <- Rs
                     if (validateIndexRegister(ir.r1) && validateMemoryAddress(ir.p) && validateIntegerOverflow(reg[ir.r1])) {
                         m[ir.p].opc = Opcode.DATA;
                         m[ir.p].p = reg[ir.r1];
@@ -103,7 +104,7 @@ public class CPU {
                     }
                     break;
 
-                case ADD: // Rd ← Rd + Rs
+                case ADD: // Rd <- Rd + Rs
                     if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateIntegerOverflow(reg[ir.r1]) && validateIntegerOverflow(reg[ir.r2]) && validateIntegerOverflow(reg[ir.r1] + reg[ir.r2])) {
                         reg[ir.r1] = reg[ir.r1] + reg[ir.r2];
                         pc++;
@@ -114,7 +115,7 @@ public class CPU {
                         break;
                     }
 
-                case MULT: // Rd ← Rd * Rs
+                case MULT: // Rd <- Rd * Rs
                     if (validateIndexRegister(ir.r2) && validateIndexRegister(ir.r1)) {
                         if (validateIntegerOverflow(reg[ir.r1] * reg[ir.r2]) && validateIntegerOverflow(reg[ir.r1]) && validateIntegerOverflow(reg[ir.r2])) {
                             reg[ir.r1] = reg[ir.r1] * reg[ir.r2];
@@ -123,7 +124,7 @@ public class CPU {
                     }
                     break;
 
-                case ADDI: // Rd ← Rd + k
+                case ADDI: // Rd <- Rd + k
                     if (validateIndexRegister(ir.r1) && validateIntegerOverflow(reg[ir.r1]) && validateIntegerOverflow(ir.p) && validateIntegerOverflow(reg[ir.r1] + ir.p)) {
                         reg[ir.r1] = reg[ir.r1] + ir.p;
                         pc++;
@@ -134,7 +135,7 @@ public class CPU {
                         break;
                     }
 
-                case STX: // [Rd] ←Rs
+                case STX: // [Rd] <-Rs
                     if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateMemoryAddress(reg[ir.r1])) {
                         m[reg[ir.r1]].opc = Opcode.DATA;
                         m[reg[ir.r1]].p = reg[ir.r2];
@@ -142,7 +143,7 @@ public class CPU {
                     }
                     break;
 
-                case SUB: // Rd ← Rd - Rs
+                case SUB: // Rd <- Rd - Rs
                     if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateIntegerOverflow(reg[ir.r2]) && validateIntegerOverflow(reg[ir.r1]) && validateIntegerOverflow(reg[ir.r1] - reg[ir.r2])) {
                         reg[ir.r1] = reg[ir.r1] - reg[ir.r2];
                         pc++;
@@ -153,7 +154,7 @@ public class CPU {
                         break;
                     }
 
-                case SUBI: // Rd ← Rd – k
+                case SUBI: // Rd <- Rd – k
                     if (validateIndexRegister(ir.r1) && validateIntegerOverflow(reg[ir.r1]) && validateIntegerOverflow(ir.p) && validateIntegerOverflow(reg[ir.r1] - ir.p)) {
                         reg[ir.r1] = reg[ir.r1] - ir.p;
                         pc++;
@@ -164,7 +165,7 @@ public class CPU {
                         break;
                     }
 
-                case JMP: //  PC ← k
+                case JMP: //  PC <- k
                     if (validateMemoryAddress(ir.p)) {
                         pc = ir.p;
                         break;
@@ -178,7 +179,7 @@ public class CPU {
                     }
                     break;
 
-                case JMPIG: // If Rc > 0 Then PC ← Rs Else PC ← PC +1
+                case JMPIG: // If Rc > 0 Then PC <- Rs Else PC <- PC +1
                     if (validateIndexRegister(ir.r2) && validateIndexRegister(ir.r1) && validateMemoryAddress(reg[ir.r1])) {
                         if (reg[ir.r2] > 0) {
                             pc = reg[ir.r1];
@@ -189,7 +190,7 @@ public class CPU {
                     }
                     break;
 
-                case JMPIE: // If Rc = 0 Then PC ← Rs Else PC ← PC +1
+                case JMPIE: // If Rc = 0 Then PC <- Rs Else PC <- PC +1
                     if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateMemoryAddress(reg[ir.r1])) {
                         if (reg[ir.r2] == 0) {
                             pc = reg[ir.r1];
@@ -200,7 +201,7 @@ public class CPU {
                     }
                     break;
 
-                case JMPIL: // If Rc < 0 Then PC ← Rs Else PC ← PC +1
+                case JMPIL: // If Rc < 0 Then PC <- Rs Else PC <- PC +1
                     if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateMemoryAddress(reg[ir.r1])) {
                         if (reg[ir.r2] < 0) {
                             pc = reg[ir.r1];
@@ -209,6 +210,15 @@ public class CPU {
                         }
                         break;
                     }
+                    break;
+
+                case SWAP:
+                    if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2)) {
+                        int aux = reg[ir.r1];
+                        reg[ir.r1] = reg[ir.r2];
+                        reg[ir.r2] = aux;
+                    }
+                    pc++;
                     break;
 
                 case TRAP:

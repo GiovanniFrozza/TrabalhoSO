@@ -17,7 +17,7 @@ public class Programas {
     public Word[] fibonacci() {
         return new Word[]{
                 new Word(Opcode.LDI, 0, -1, 5), //alterar o valor de P para negativo ou positivo
-                new Word(Opcode.STD, 0, -1, 25),
+                new Word(Opcode.STD, 0, -1, 25), // 1
                 new Word(Opcode.LDD, 1, -1, 25),
                 new Word(Opcode.LDI, 7, -1, 8),
                 new Word(Opcode.JMPIG, 7, 1, -1),
@@ -47,31 +47,30 @@ public class Programas {
         return new Word[]{
                 new Word(Opcode.LDI, 8, -1, 1),      // 0
                 new Word(Opcode.TRAP, -1, -1, -1),   // 1
-                new Word(Opcode.STX, 0, 9, -1),
-                new Word(Opcode.LDI, 0, -1, 5), //alterar o valor de P para negativo ou positivo
-                new Word(Opcode.STD, 0, -1, 25),
-                new Word(Opcode.LDD, 1, -1, 25),
-                new Word(Opcode.LDI, 7, -1, 8),
-                new Word(Opcode.JMPIG, 7, 1, -1),
-                new Word(Opcode.LDI, 3, -1, -1),
-                new Word(Opcode.STD, 3, -1, 26),
-                new Word(Opcode.STOP, -1, -1, -1), // 7
-                new Word(Opcode.LDI, 0, -1, 0),
-                new Word(Opcode.LDI, 1, -1, 1),
-                new Word(Opcode.LDI, 2, -1, 27), // posicao para escrita
-                new Word(Opcode.LDD, 3, -1, 25), // reg para n de fibo
-                new Word(Opcode.LDI, 7, -1, 7), // 12  //reg para stop
-                new Word(Opcode.STX, 2, 0, -1), //inicio loop
-                new Word(Opcode.ADDI, 2, -1, 1),
-                new Word(Opcode.SUBI, 3, -1, 1),
-                new Word(Opcode.JMPIE, 7, 3, -1),
-                new Word(Opcode.STX, 2, 1, -1),
-                new Word(Opcode.ADDI, 2, -1, 1),
-                new Word(Opcode.SUBI, 3, -1, 1),
-                new Word(Opcode.JMPIE, 7, 3, -1),
-                new Word(Opcode.ADD, 0, 1, -1),
-                new Word(Opcode.ADD, 1, 0, -1),
-                new Word(Opcode.JMP, -1, -1, 13)    //volta pro loop
+                new Word(Opcode.SWAP, 0, 9, -1),     // 2
+                new Word(Opcode.STD, 0, -1, 27),     // 3
+                new Word(Opcode.LDD, 1, -1, 27),     // 4
+                new Word(Opcode.LDI, 7, -1, 10),     // 5
+                new Word(Opcode.JMPIG, 7, 1, -1),    // 6
+                new Word(Opcode.LDI, 3, -1, -1),     // 7
+                new Word(Opcode.STD, 3, -1, 28),     // 8
+                new Word(Opcode.STOP, -1, -1, -1),   // 9
+                new Word(Opcode.LDI, 0, -1, 0),      // 10
+                new Word(Opcode.LDI, 1, -1, 1),      // 11
+                new Word(Opcode.LDI, 2, -1, 29),     // 12 posicao para escrita
+                new Word(Opcode.LDD, 3, -1, 27),     // 13 reg para n de fibo
+                new Word(Opcode.LDI, 7, -1, 9),      // 14 reg para stop
+                new Word(Opcode.STX, 2, 0, -1),      // 15 inicio loop
+                new Word(Opcode.ADDI, 2, -1, 1),     // 16
+                new Word(Opcode.SUBI, 3, -1, 1),     // 17
+                new Word(Opcode.JMPIE, 7, 3, -1),    // 18
+                new Word(Opcode.STX, 2, 1, -1),      // 19
+                new Word(Opcode.ADDI, 2, -1, 1),     // 20
+                new Word(Opcode.SUBI, 3, -1, 1),     // 21
+                new Word(Opcode.JMPIE, 7, 3, -1),    // 22
+                new Word(Opcode.ADD, 0, 1, -1),      // 23
+                new Word(Opcode.ADD, 1, 0, -1),      // 24
+                new Word(Opcode.JMP, -1, -1, 15)     // 25 volta pro loop
         };
     };
 
@@ -98,7 +97,7 @@ public class Programas {
         return new Word[] {
                 new Word(Opcode.LDI, 8, -1, 1),      // 0
                 new Word(Opcode.TRAP, -1, -1, -1),   // 1
-                new Word(Opcode.STX, 0, 9, -1),      // 2
+                new Word(Opcode.SWAP, 0, 9, -1),     // 2
                 new Word(Opcode.LDI, 1, -1, 1),      // 3   r1 é 1 para multiplicar (por r0)
                 new Word(Opcode.LDI, 5, -1, 12),     // 4   r7 tem posicao do programa = 9
                 new Word(Opcode.LDI, 6, -1, 1),      // 5   r6 é 1 para ser o decremento
@@ -109,9 +108,12 @@ public class Programas {
                 new Word(Opcode.SUB, 0, 6, -1),      // 10   decrementa r0 1
                 new Word(Opcode.JMP, -1, -1, 8),     // 11   vai p posicao 5
                 new Word(Opcode.LDI, 1, -1, -1),     // 12  r1 é -1
-                new Word(Opcode.STD, 1, -1, 15),     // 13  coloca valor de r1 na posição 13
-                new Word(Opcode.STOP, -1, -1, -1),   // 14  stop
-                new Word(Opcode.DATA, -1, -1, -1)    // 15  resultado
+                new Word(Opcode.STD, 1, -1, 18),     // 13  coloca valor de r1 na posição 13
+                new Word(Opcode.LDI, 8, -1, 2),      // 14  resultado
+                new Word(Opcode.SWAP, 1, 9, -1),     // 15  resultado
+                new Word(Opcode.TRAP, -1, -1, -1),   // 16  resultado
+                new Word(Opcode.STOP, -1, -1, -1),   // 17  stop
+                new Word(Opcode.DATA, -1, -1, -1)    // 18  resultado
         };
     }
 

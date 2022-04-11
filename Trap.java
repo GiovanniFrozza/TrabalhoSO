@@ -13,12 +13,11 @@ public class Trap {
         if (reg[8] == 1) {
             Scanner in = new Scanner(System.in);
             System.out.println("IN: ");
-            m[reg[9]].p = in.nextInt();
-            in.close();
+            reg[9] = in.nextInt();
         }
         
         if (reg[8] == 2) {
-            System.out.println("OUT: " + m[reg[9]].p);
+            System.out.println("OUT: " + reg[9]);
         }
     }
 }

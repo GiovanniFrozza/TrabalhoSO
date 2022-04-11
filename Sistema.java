@@ -23,10 +23,11 @@ public class Sistema {
 		Sistema s = new Sistema();
 		// FIBONACCI
 		// s.roda(progs.fibonacci());
+		// s.roda(progs.fibonacciComEntrada());
 
 		// FATORIAL
 		// s.roda(progs.fatorial());
-		// s.roda(progs.fatorialComEntrada());
+		s.roda(progs.fatorialComEntrada());
 
 		// BUBBLE SORT
 		// s.roda(progs.bubbleSort());
