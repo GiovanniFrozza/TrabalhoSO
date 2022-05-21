@@ -72,8 +72,7 @@ public class Sistema {
 
 		do {
 			System.out.println("1: Fatorial \n2: Fibonacci \n3: Bubble Sort \n0: SAIR" );
-			resultado = teclado.nextInt();
-			switch (resultado) {
+			switch (resultado = teclado.nextInt()) {
 				case 1:
 					fatorial();
 				case 2:
