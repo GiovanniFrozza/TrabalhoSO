@@ -1,3 +1,5 @@
+import java.util.List;
+
 // -------------------------------------------------------------------------------------------------------
 // --------------------- C P U  -  definicoes da CPU -----------------------------------------------------
 public class CPU {
@@ -7,19 +9,20 @@ public class CPU {
     private int[] reg;       	// registradores da CPU
     private Trap trap;
     private Interruptor interruptor;
-
     private InterruptorEnum interruptorEnum;
     private Word[] m;   // CPU acessa MEMORIA, guarda referencia 'm' a ela. memoria nao muda. ee sempre a mesma.
+    private List<Integer> pages;
 
     public CPU(Word[] _m) {     // ref a MEMORIA e interrupt handler passada na criacao da CPU
-        m = _m; 				// usa o atributo 'm' para acessar a memoria.
-        reg = new int[10]; 		// aloca o espaço dos registradores
-        trap = new Trap(m, reg);
-        interruptor = new Interruptor(trap);
+        this.m = _m; 				// usa o atributo 'm' para acessar a memoria.
+        this.reg = new int[10]; 		// aloca o espaço dos registradores
+        this.trap = new Trap(m, reg);
+        this.interruptor = new Interruptor(trap);
     }
 
-    public void setContext(int _pc) {  // no futuro esta funcao vai ter que ser
-        pc = _pc; // limite e pc (deve ser zero nesta versao)
+    public void setContext(int _pc, List<Integer> pages) {  // no futuro esta funcao vai ter que ser
+        this.pc = _pc; // limite e pc (deve ser zero nesta versao)
+        this.pages = pages;
     }
 
     private void dump(Word w) {
@@ -59,16 +62,19 @@ public class CPU {
         return false;
     }
 
-    // private boolean isValueValid(int p) {
-    //     if (p)
-    // }
-
-    // private boolean isInstructionValid(int )
+    public int translate(int address) {
+       try {
+           return (this.pages.get(address/VM.pageSize)*VM.pageSize)+(address%VM.pageSize);
+       } catch (Exception e) {
+           interruptorEnum = InterruptorEnum.INVALID_ADDRESS;
+           return -1;
+       }
+    }
 
     public void run() { 		// execucao da CPU supoe que o contexto da CPU, vide acima, esta devidamente setado
         while (true) { 			// ciclo de instrucoes. acaba cfe instrucao, veja cada caso.
             // FETCH
-            ir = m[pc]; 	// busca posicao da memoria apontada por pc, guarda em ir
+            ir = m[translate(pc)]; 	// busca posicao da memoria apontada por pc, guarda em ir
             //if debug
             interruptorEnum = null;
             showState();
@@ -83,8 +89,8 @@ public class CPU {
                     break;
 
                 case LDD: // Rd <- [A]
-                    if (validateIndexRegister(ir.r1) && validateMemoryAddress(ir.p) && validateIntegerOverflow(m[ir.p].p)) {
-                        reg[ir.r1] = m[ir.p].p;
+                    if (validateIndexRegister(ir.r1) && validateMemoryAddress(translate(ir.p)) && validateIntegerOverflow(m[ir.p].p)) {
+                        reg[ir.r1] = m[translate(ir.p)].p;
                         pc++;
                     }
                     break;
@@ -97,9 +103,9 @@ public class CPU {
                     break;
 
                 case STD: // [A] <- Rs
-                    if (validateIndexRegister(ir.r1) && validateMemoryAddress(ir.p) && validateIntegerOverflow(reg[ir.r1])) {
-                        m[ir.p].opc = Opcode.DATA;
-                        m[ir.p].p = reg[ir.r1];
+                    if (validateIndexRegister(ir.r1) && validateMemoryAddress(translate(ir.p)) && validateIntegerOverflow(reg[ir.r1])) {
+                        m[translate(ir.p)].opc = Opcode.DATA;
+                        m[translate(ir.p)].p = reg[ir.r1];
                         pc++;
                     }
                     break;
@@ -136,9 +142,9 @@ public class CPU {
                     }
 
                 case STX: // [Rd] <-Rs
-                    if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateMemoryAddress(reg[ir.r1])) {
-                        m[reg[ir.r1]].opc = Opcode.DATA;
-                        m[reg[ir.r1]].p = reg[ir.r2];
+                    if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateMemoryAddress(translate(reg[ir.r1]))) {
+                        m[translate(reg[ir.r1])].opc = Opcode.DATA;
+                        m[translate(reg[ir.r1])].p = reg[ir.r2];
                         pc++;
                     }
                     break;
@@ -166,21 +172,21 @@ public class CPU {
                     }
 
                 case JMP: //  PC <- k
-                    if (validateMemoryAddress(ir.p)) {
+                    if (validateMemoryAddress(translate(ir.p))) {
                         pc = ir.p;
                         break;
                     }
                     break;
 
                 case JMPI: // PC <- R1
-                    if (validateIndexRegister(ir.r1) && validateMemoryAddress(reg[ir.r1])) {
+                    if (validateIndexRegister(translate(ir.r1)) && validateMemoryAddress(translate(reg[ir.r1]))) {
                         pc = reg[ir.r1];
                         break;
                     }
                     break;
 
                 case JMPIG: // If Rc > 0 Then PC <- Rs Else PC <- PC +1
-                    if (validateIndexRegister(ir.r2) && validateIndexRegister(ir.r1) && validateMemoryAddress(reg[ir.r1])) {
+                    if (validateIndexRegister(ir.r2) && validateIndexRegister(ir.r1) && validateMemoryAddress(translate(reg[ir.r1]))) {
                         if (reg[ir.r2] > 0) {
                             pc = reg[ir.r1];
                         } else {
@@ -191,7 +197,7 @@ public class CPU {
                     break;
 
                 case JMPIE: // If Rc = 0 Then PC <- Rs Else PC <- PC +1
-                    if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateMemoryAddress(reg[ir.r1])) {
+                    if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateMemoryAddress(translate(reg[ir.r1]))) {
                         if (reg[ir.r2] == 0) {
                             pc = reg[ir.r1];
                         } else {
@@ -202,7 +208,7 @@ public class CPU {
                     break;
 
                 case JMPIL: // If Rc < 0 Then PC <- Rs Else PC <- PC +1
-                    if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateMemoryAddress(reg[ir.r1])) {
+                    if (validateIndexRegister(ir.r1) && validateIndexRegister(ir.r2) && validateMemoryAddress(translate(reg[ir.r1]))) {
                         if (reg[ir.r2] < 0) {
                             pc = reg[ir.r1];
                         } else {

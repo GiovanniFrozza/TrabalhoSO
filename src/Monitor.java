@@ -23,7 +23,7 @@ public class Monitor {
         }
     }
     public void executa() {
-        vm.cpu.setContext(0);          // monitor seta contexto - pc aponta para inicio do programa
+        vm.cpu.setContext(0, VM.gerenteDeMemoria.pages);          // monitor seta contexto - pc aponta para inicio do programa
         vm.cpu.run();                  //                         e cpu executa
         // note aqui que o monitor espera que o programa carregado acabe normalmente
         // nao ha protecoes...  o que poderia acontecer ?
