@@ -4,12 +4,12 @@ import java.util.List;
 // --------------------- C P U  -  definicoes da CPU -----------------------------------------------------
 public class CPU {
     // característica do processador: contexto da CPU ...
-    private int pc; 			// ... composto de program counter,
-    private Word ir; 			// instruction register,
-    private int[] reg;       	// registradores da CPU
+    public int pc; 			// ... composto de program counter,
+    public Word ir; 			// instruction register,
+    public int[] reg;       	// registradores da CPU
     private Trap trap;
     private Interruptor interruptor;
-    private InterruptorEnum interruptorEnum;
+    public InterruptorEnum interruptorEnum;
     private Word[] m;   // CPU acessa MEMORIA, guarda referencia 'm' a ela. memoria nao muda. ee sempre a mesma.
     private List<Integer> pages;
 
@@ -20,9 +20,12 @@ public class CPU {
         this.interruptor = new Interruptor(trap);
     }
 
-    public void setContext(int _pc, List<Integer> pages) {  // no futuro esta funcao vai ter que ser
+    public void setContext(int _pc, List<Integer> pages, int[] reg, Word ir, InterruptorEnum interruptorEnum) {  // no futuro esta funcao vai ter que ser
         this.pc = _pc; // limite e pc (deve ser zero nesta versao)
         this.pages = pages;
+        this.reg = reg;
+        this.ir = ir;
+        this.interruptorEnum = interruptorEnum;
     }
 
     private void dump(Word w) {
@@ -63,21 +66,20 @@ public class CPU {
     }
 
     public int translate(int address) {
-       try {
-           return (this.pages.get(address/VM.pageSize)*VM.pageSize)+(address%VM.pageSize);
-       } catch (Exception e) {
-           interruptorEnum = InterruptorEnum.INVALID_ADDRESS;
-           return -1;
-       }
+        try {
+            return (this.pages.get((address / VM.pageSize)) * VM.pageSize) + (address % VM.pageSize);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public void run() { 		// execucao da CPU supoe que o contexto da CPU, vide acima, esta devidamente setado
         while (true) { 			// ciclo de instrucoes. acaba cfe instrucao, veja cada caso.
             // FETCH
+            interruptorEnum = null;
             ir = m[translate(pc)]; 	// busca posicao da memoria apontada por pc, guarda em ir
             //if debug
-            interruptorEnum = null;
-            showState();
+//            showState();
             // EXECUTA INSTRUCAO NO ir
             switch (ir.opc) { // para cada opcode, sua execução
 
@@ -245,7 +247,7 @@ public class CPU {
         }
     }
 
-    
+
 }
 // ------------------ C P U - fim ------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------

@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class GerenteDeMemoria {
-    
+
     public boolean[] frames;
     public List<Integer> pages;
 
@@ -28,38 +28,29 @@ public class GerenteDeMemoria {
         return programSize % VM.pageSize == 0 ? programSize / VM.pageSize : (programSize / VM.pageSize)+1;
     }
 
-    public List<Integer> aloca(Word[] program) {
-        this.pages.clear();
+    public List<Integer> allocate(Word[] program) {
+//        this.pages.clear();
         int nPages = getNumberPages(program.length);
-        int progIndex = 0;
 
         List<Integer> pages = new ArrayList<>();
-        for (int i = 0; i<frames.length; i++) {
+        for (int i = 0; i < frames.length; i++) {
             if (nPages == 0) break;
             if (!frames[i]) {
                 frames[i] = true;
-                for (int j = (i*VM.pageSize); j<(i+1)*VM.pageSize; j++) {
-                    if (progIndex >= program.length) break;
-                    VM.m[j].opc = program[progIndex].opc;
-                    VM.m[j].r1 = program[progIndex].r1;
-                    VM.m[j].r2 = program[progIndex].r2;
-                    VM.m[j].p = program[progIndex].p;
-                    progIndex++;
-                }
                 pages.add(i);
                 nPages--;
             }
         }
-        this.pages = pages;
+//        this.pages = pages;
         return pages;
     }
 
-    public void desaloca(List<Integer> pages){
+    public void deallocate(List<Integer> pages) {
         pages.forEach(page -> {
             for(int i = 0; i< frames.length; i++) {
                 if (page == i) {
                     frames[i] = false;
-                    resetMemory((i*VM.pageSize), (i +1)*VM.pageSize);
+//                    resetMemory((i*VM.pageSize), (i +1)*VM.pageSize);
                 }
             }
         });

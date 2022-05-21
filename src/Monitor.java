@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Monitor {
     private VM vm;
 
@@ -22,9 +24,13 @@ public class Monitor {
             m[i].opc = p[i].opc;     m[i].r1 = p[i].r1;     m[i].r2 = p[i].r2;     m[i].p = p[i].p;
         }
     }
-    public void executa() {
-        vm.cpu.setContext(0, VM.gerenteDeMemoria.pages);          // monitor seta contexto - pc aponta para inicio do programa
-        vm.cpu.run();                  //                         e cpu executa
+    public void executa(int processId) {
+        ProcessControlBlock pcb = VM.gerenteDeProcesso.getProcess(processId);
+        if (Objects.nonNull(pcb)) {
+            VM.gerenteDeProcesso.setRunning(pcb);
+            vm.cpu.setContext(pcb.getPc(), pcb.getPages(), pcb.getReg(), pcb.getIr(), pcb.getInterruptorEnum());          // monitor seta contexto - pc aponta para inicio do programa
+            vm.cpu.run();                  //                         e cpu executa
+        }
         // note aqui que o monitor espera que o programa carregado acabe normalmente
         // nao ha protecoes...  o que poderia acontecer ?
     }

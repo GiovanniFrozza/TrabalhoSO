@@ -18,7 +18,7 @@ public class Interruptor {
                     System.out.println("Instrucao invalida!");
                     interrupted = true;
                     break;
-                
+
                 case INVALID_REGISTER:
                     System.out.println("Registrador invalido!");
                     interrupted = true;
@@ -32,10 +32,12 @@ public class Interruptor {
                 case SYSTEM_CALL:
                     trap.execute();
                     break;
-                    
+
                 case END_PROGRAM:
                     System.out.println("Programa finalizado!");
                     interrupted = true;
+                    ProcessControlBlock pcb = VM.gerenteDeProcesso.getRunning();
+                    VM.gerenteDeProcesso.deallocatePCB(pcb.getId());
                     break;
             }
         }

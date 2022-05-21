@@ -6,6 +6,7 @@ public class VM {
     public static int pageSize;
     public static Word[] m;
     public static GerenteDeMemoria gerenteDeMemoria;
+    public static GerenteDeProcesso gerenteDeProcesso;
 
     public VM(){
         // memória
@@ -13,11 +14,12 @@ public class VM {
         pageSize = 16;
         m = new Word[memSize]; // m ee a memoria
         for (int i = 0; i< memSize; i++) {
-            m[i] = new Word(Opcode.___,-1,-1,-1); 
+            m[i] = new Word(Opcode.___,-1,-1,-1);
         }
         // cpu
         cpu = new CPU(m);   // cpu acessa memória
         gerenteDeMemoria = new GerenteDeMemoria();
+        gerenteDeProcesso = new GerenteDeProcesso(cpu);
     }
 }
 // ------------------- V M  - fim ------------------------------------------------------------------------

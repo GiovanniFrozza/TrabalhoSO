@@ -76,7 +76,7 @@ public class Programas {
 
     public Word[] fatorial() {
         return new Word[] {
-                new Word(Opcode.LDI, 0, -1, 2000),      // 0   r0 é valor a calcular fatorial
+                new Word(Opcode.LDI, 0, -1, 6),      // 0   r0 é valor a calcular fatorial
                 new Word(Opcode.LDI, 1, -1, 1),      // 1   r1 é 1 para multiplicar (por r0)
                 new Word(Opcode.LDI, 5, -1, 10),     // 2   r7 tem posicao do programa = 9
                 new Word(Opcode.LDI, 6, -1, 1),      // 3   r6 é 1 para ser o decremento

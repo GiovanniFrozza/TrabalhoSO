@@ -16,7 +16,7 @@ public class Trap {
                 reg[9] = in.nextInt();
             }
         }
-        
+
         if (reg[8] == 2) {
             System.out.println("OUT: " + reg[9]);
         }
