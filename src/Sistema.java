@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Sistema {
 	public VM vm;
 	public Monitor monitor;
@@ -36,13 +38,17 @@ public class Sistema {
 	}
 
 	public static void main(String args[]) {
+		menu();
+
+		/*
+
 		Sistema s = new Sistema();
 		// FIBONACCI
 		// s.roda(progs.fibonacci());
 		// s.roda(progs.fibonacciComEntrada());
 
 		// FATORIAL
-//		 s.roda(progs.fatorial());
+		//	s.roda(progs.fatorial());
 		//	s.roda(progs.fatorialComEntrada());
 
 		// BUBBLE SORT
@@ -52,6 +58,66 @@ public class Sistema {
 		s.load(progs.fatorial());
 		s.load(progs.fatorial());
 		s.load(progs.fatorial());
+
+		s.execute(1);
+		s.execute(2);
+
+		*/
+
+	}
+
+	private static void menu() {
+		Scanner teclado = new Scanner(System.in);
+		int resultado;
+
+		do {
+			System.out.println("1: Fatorial \n2: Fibonacci \n3: Bubble Sort \n0: SAIR" );
+			resultado = teclado.nextInt();
+			switch (resultado) {
+				case 1:
+					fatorial();
+				case 2:
+					fibonacci();
+				case 3:
+					bubbleSort();
+				case 0:
+					break;
+			}
+		} while (resultado != 0);
+
+	}
+
+	private static void fatorial() {
+		Sistema s = new Sistema();
+
+		s.load(progs.fatorial());
+		s.load(progs.fatorial());
+		s.load(progs.fatorial());
+		s.load(progs.fatorial());
+
+		s.execute(1);
+		s.execute(2);
+	}
+
+	private static void fibonacci() {
+		Sistema s = new Sistema();
+
+		s.load(progs.fibonacci());
+		s.load(progs.fibonacci());
+		s.load(progs.fibonacci());
+		s.load(progs.fibonacci());
+
+		s.execute(1);
+		s.execute(2);
+	}
+
+	private static void bubbleSort() {
+		Sistema s = new Sistema();
+
+		s.load(progs.bubbleSort());
+		s.load(progs.bubbleSort());
+		s.load(progs.bubbleSort());
+		s.load(progs.bubbleSort());
 
 		s.execute(1);
 		s.execute(2);
