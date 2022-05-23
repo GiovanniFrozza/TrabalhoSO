@@ -14,7 +14,7 @@ public class GerenteDeProcesso {
         this.cpu = cpu;
     }
 
-    public void allocatePCB(Word[] program) {
+    public void allocatePCB(Word[] program, String programName) {
         if (VM.gerenteDeMemoria.verifySpace(program.length)) {
             List<Integer> pages = VM.gerenteDeMemoria.allocate(program);
             int progIndex = 0;
@@ -30,7 +30,7 @@ public class GerenteDeProcesso {
                 }
             }
 
-            ProcessControlBlock pcb = new ProcessControlBlock(id++, pages, cpu.pc, cpu.reg, cpu.ir, cpu.interruptorEnum);
+            ProcessControlBlock pcb = new ProcessControlBlock(id++, pages, cpu.pc, cpu.reg, cpu.ir, cpu.interruptorEnum, programName);
             process.add(pcb);
         }
     }
@@ -52,5 +52,9 @@ public class GerenteDeProcesso {
 
     public void setRunning(ProcessControlBlock running) {
         this.running = running;
+    }
+
+    public ConcurrentLinkedQueue<ProcessControlBlock> getProcess() {
+        return process;
     }
 }

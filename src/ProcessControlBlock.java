@@ -9,18 +9,21 @@ public class ProcessControlBlock {
     private Word ir;
     private InterruptorEnum interruptorEnum;
 
+    private String programName;
+
     public ProcessControlBlock() {
         this.id = 0;
         this.pages = Collections.emptyList();
     }
 
-    public ProcessControlBlock(Integer id, List<Integer> pages, int pc, int[] reg, Word ir, InterruptorEnum interruptorEnum) {
+    public ProcessControlBlock(Integer id, List<Integer> pages, int pc, int[] reg, Word ir, InterruptorEnum interruptorEnum, String programName) {
         this.id = id;
         this.pages = pages;
         this.pc = pc;
         this.reg = reg;
         this.ir = ir;
         this.interruptorEnum = interruptorEnum;
+        this.programName = programName;
     }
 
     public Integer getId() {
@@ -69,5 +72,9 @@ public class ProcessControlBlock {
 
     public void setInterruptorEnum(InterruptorEnum interruptorEnum) {
         this.interruptorEnum = interruptorEnum;
+    }
+
+    public String getProgramName() {
+        return programName;
     }
 }
