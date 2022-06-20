@@ -50,7 +50,6 @@ public class GerenteDeMemoria {
             for(int i = 0; i< frames.length; i++) {
                 if (page == i) {
                     frames[i] = false;
-//                    resetMemory((i*VM.pageSize), (i +1)*VM.pageSize);
                 }
             }
         });

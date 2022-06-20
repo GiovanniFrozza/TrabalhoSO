@@ -10,8 +10,8 @@ public class VM {
 
     public VM(){
         // memória
-        memSize = 1024;
-        pageSize = 16;
+        memSize = 2048;
+        pageSize = 32;
         m = new Word[memSize]; // m ee a memoria
         for (int i = 0; i< memSize; i++) {
             m[i] = new Word(Opcode.___,-1,-1,-1);
